@@ -1,4 +1,4 @@
-function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
+function [best_net best_num] = nnCrossVal(ytrain,xtrain,ytest,xtest)
 
     opts.batchsize = 100;
     opts.numepochs = 10;
@@ -53,12 +53,13 @@ function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
         elseif new_er > 1.2 * er
             disp('Training set error is increasing')
             break
-        elseif numepochs > maxepochs
+        elseif numepochs >= maxepochs
             disp('Max epochs reached')
             break
         elseif new_er < er
             er       = new_er;
             best_net = net;
+            best_num = numepochs;
         end
 
     end
