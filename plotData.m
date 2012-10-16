@@ -20,6 +20,7 @@ function plotData(data)
         end
     end
 
+    figure
     imagesc(img)
     colormap('gray')
 
