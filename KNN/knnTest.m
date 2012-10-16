@@ -1,4 +1,4 @@
-function knnTest
+function knnTest()
 
     [y x] = loadData;
     
