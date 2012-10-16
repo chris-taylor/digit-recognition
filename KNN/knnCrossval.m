@@ -9,21 +9,40 @@ function [kvals mcr] = knnCrossval(y,X,SILENT)
     end
 
     kvals = 1:10;
+    numk  = length(kvals);
     
     mcr = zeros(size(kvals));
-    
-    for i = 1:length(kvals)
-       
-        k = kvals(i);
+
+    % Cross validation loop
+
+    kfold   = 5;
+    T       = size(X,1);
+    sz      = fix(T/kfold);
+    loss    = zeros(kfold,numk);
+    indices = randperm(T);
+
+    for i = 1:kfold
         
         if ~SILENT
-            fprintf('k = %d\n',k);
+            fprintf('kfold = %d\n',i);
+        end
+       
+        test  = indices((i-1) * sz + (1:sz));
+        train = setdiff(indices,test);
+        
+        Xtrain = X(train,:);
+        Xtest  = X(test,:);
+        Ytrain = y(train);
+        Ytest  = y(test);
+
+        Ypred  = knn(Ytrain,Xtrain,Xtest,kvals);
+
+        for j = 1:length(kvals)
+            loss(i,j) = mean(Ypred(:,j) ~= Ytest);
         end
         
-        predfun = @(ytrain,xtrain,xtest) knn(ytrain,xtrain,xtest,k);
-        
-        mcr(i) = cv('mcr',y,X,predfun);
-        
     end
+
+    mcr = mean(loss);
 
 end
