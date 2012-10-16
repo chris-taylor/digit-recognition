@@ -1,4 +1,4 @@
-function csv2mat()
+function [ytrain xtrain xtest] = csv2mat()
 
     px = 28; % Number of pixels per side
 
