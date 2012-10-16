@@ -25,6 +25,10 @@ function master()
 
     % Write output to disk
 
+    if ~exist('Output','dir')
+        mkdir('Output')
+    end
+
     csvwrite('Output/predictions.csv',pred);
 
 end
