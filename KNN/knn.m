@@ -14,23 +14,18 @@ function pred = knn(y,train,test,k)
 
     assert(mtrain == mtest);
 
-    % Compute distances
+    % Compute distances and make predictions
 
-    dist = zeros(ntest,ntrain);
-
-    for i = 1:ntest
-        dist(i,:) = sum((repmat(test(i,:),ntrain,1) - train).^2,2);
-    end
-
-    % Make predictions
-
-    pred = zeros(size(test,1),1);
+    pred = zeros(ntest,1);
 
     for i = 1:ntest
-        [vec idx] = sort(dist(i,:));
+        dist = sum((repmat(test(i,:),ntrain,1) - train).^2,2);
+        [vec idx] = sort(dist);
         pred(i) = mode(double(y(idx(1:k))));
     end
 
+    % Output formatting
+    
     if isa(y,'nominal')
         pred = nominal(pred);
     end
