@@ -1,4 +1,4 @@
-function [ytrain xtrain xtest] = loadData
+function [ytrain xtrain xtest] = loadData()
 
     load('Data/data.mat','ytrain','xtrain','xtest');
     
