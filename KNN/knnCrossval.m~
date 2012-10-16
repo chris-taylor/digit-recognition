@@ -1,5 +1,8 @@
 function [kvals mcr] = knnCrossval(y,X,SILENT)
 %KNNCROSSVAL Perform cross-validation to select a good value of K for
+%the K nearest-neighbor algorithm.
+
+%Author: Chris Taylor
 
     if nargin < 3
         SILENT = false;
@@ -17,7 +20,7 @@ function [kvals mcr] = knnCrossval(y,X,SILENT)
             fprintf('k = %d\n',k);
         end
         
-        predfun = @(xtrain,ytrain,xtest) knn(ytrain,xtrain,xtest,k);
+        predfun = @(ytrain,xtest) knn(ytrain,xtrain,xtest,k);
         
         mcr(i) = crossval('mcr',X,y,'Predfun',predfun);
         

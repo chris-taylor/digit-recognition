@@ -8,7 +8,7 @@ function [kvals mcr] = knnCrossval(y,X,SILENT)
         SILENT = false;
     end
 
-    kvals = 10:10:100;
+    kvals = 1:10;
     
     mcr = zeros(size(kvals));
     
@@ -20,9 +20,9 @@ function [kvals mcr] = knnCrossval(y,X,SILENT)
             fprintf('k = %d\n',k);
         end
         
-        predfun = @(xtrain,ytrain,xtest) knn(ytrain,xtrain,xtest,k);
+        predfun = @(ytrain,xtrain,xtest) knn(ytrain,xtrain,xtest,k);
         
-        mcr(i) = crossval('mcr',X,y,'Predfun',predfun);
+        mcr(i) = cv('mcr',y,X,predfun);
         
     end
 

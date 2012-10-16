@@ -15,8 +15,6 @@ function mcr = knnTest
     
     pred = knn(y1,x1,x2,k);
     
-    keyboard
-    
     mcr = mean(pred ~= y2);
     
     [k m] = knnCrossval(y1,x1);
