@@ -1,9 +1,9 @@
 function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
 
     opts.batchsize = 100;
-    opts.numepochs = 5;
+    opts.numepochs = 10;
 
-    maxepochs = 100 / opts.numepochs;
+    maxepochs = 500;
 
     K = size(xtrain,2);
     L = 10;  % Number of classes
@@ -27,6 +27,8 @@ function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
 
     % Neural net training loop
     er = Inf;
+
+    ii = 0;
     numepochs = 0;
 
     train_er = [];
@@ -39,11 +41,12 @@ function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
         new_er = nntest(net,xtest,ztest);
 
         % Record errors
-        numepochs = numepochs + 1;
+        ii = ii + 1;
+        numepochs = numepochs + opts.numepochs;
         train_er(end+1) = net.rL(end);
         test_er(end+1)  = new_er;
 
-        fprintf('Error rate is %f\n',new_er)
+        fprintf('No. epochs: %d, error rate: %.2f%%\n',numepochs,100*new_er)
 
         if isnan(net.rL(end)) || isnan(new_er)
             error('Measured error is NaN')
@@ -60,7 +63,7 @@ function [best_net numepochs] = nnCrossVal(ytrain,xtrain,ytest,xtest)
 
     end
 
-    plot(1:numepochs, [train_er; test_er]')
+    plot(opts.numepochs * (1:ii), [train_er; test_er]')
     xlabel('Number of epochs')
     ylabel('Misclassification rate')
     legend({'Training Set','Test Set'})
